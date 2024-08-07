@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
@@ -67,7 +70,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        // list of roles[USER,ADMIN]
+        // colelction of SimpleGrantedAuthority[roles{ADMIN,USER}]
+       Collection<SimpleGrantedAuthority> roles =   roleList.stream().map(role-> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+       return roles;
     }
 
     //for this project email is our user id
